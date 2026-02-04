@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>农产品溯源系统 - 乡野故事与用户评价</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+            padding-bottom: 2rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+        
+        .section-title {
+            text-align: center;
+            color: #1e5f3a;
+            margin-bottom: 2.5rem;
+            font-size: 2.2rem;
+            position: relative;
+        }
+        
+        .section-title:after {
+            content: '';
+            position: absolute;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, #2c8c4a, #a3d977);
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+        
+        .rural-section {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-bottom: 3rem;
+        }
+        
+        .panel {
+            flex: 1;
+            min-width: 300px;
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .panel:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+        }
+        
+        .panel-header {
+            background: linear-gradient(135deg, #8BC34A 0%, #689F38 100%);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        
+        .panel-header h2 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .panel-header p {
+            opacity: 0.9;
+            font-size: 1rem;
+        }
+        
+        .panel-content {
+            padding: 2rem;
+        }
+        
+        /* 乡野故事科普区域样式 */
+        .story-intro {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #555;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+        
+        .story-links {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .story-link {
+            display: flex;
+            border-radius: 12px;
+            overflow: hidden;
+            background-color: #f9f9f9;
+            transition: all 0.3s;
+            text-decoration: none;
+            border: 1px solid #eaeaea;
+        }
+        
+        .story-link:hover {
+            background-color: #f0f7e6;
+            transform: translateX(5px);
+            border-color: #c5e1a5;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .story-image {
+            flex: 0 0 120px;
+            height: 120px;
+            overflow: hidden;
+        }
+        
+        .story-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        
+        .story-link:hover .story-image img {
+            transform: scale(1.05);
+        }
+        
+        .story-info {
+            flex: 1;
+            padding: 1.2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .story-info h3 {
+            color: #2c8c4a;
+            margin-bottom: 0.5rem;
+            font-size: 1.3rem;
+        }
+        
+        .story-info p {
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 0.5rem;
+        }
+        
+        .story-meta {
+            display: flex;
+            justify-content: space-between;
+            color: #888;
+            font-size: 0.85rem;
+        }
+        
+        .read-more {
+            color: #2c8c4a;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 0.5rem;
+        }
+        
+        .read-more i {
+            transition: transform 0.3s;
+        }
+        
+        .story-link:hover .read-more i {
+            transform: translateX(3px);
+        }
+        
+        /* 用户好评区域样式 */
+        .reviews-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .rating-summary {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .rating-stars {
+            color: #FFC107;
+            font-size: 1.2rem;
+        }
+        
+        .rating-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #333;
+        }
+        
+        .total-reviews {
+            color: #666;
+            font-size: 0.95rem;
+        }
+        
+        .reviews-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .review-item {
+            padding: 1.5rem;
+            border-radius: 12px;
+            background-color: #f9f9f9;
+            border-left: 4px solid #8BC34A;
+        }
+        
+        .review-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 1rem;
+            border: 3px solid #e0f2e1;
+        }
+        
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .user-info h4 {
+            color: #333;
+            margin-bottom: 0.2rem;
+        }
+        
+        .user-info .user-title {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .review-rating {
+            color: #FFC107;
+            margin-left: auto;
+        }
+        
+        .review-content {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+        
+        .review-date {
+            color: #888;
+            font-size: 0.85rem;
+            text-align: right;
+        }
+        
+        /* 返回按钮样式 */
+        .back-to-main {
+            text-align: center;
+            margin-top: 2rem;
+        }
+        
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);
+            color: white;
+            padding: 0.9rem 1.8rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+        
+        .back-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(76, 175, 80, 0.4);
+            gap: 15px;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .rural-section {
+                flex-direction: column;
+            }
+            
+            .panel {
+                min-width: 100%;
+            }
+            
+            .story-link {
+                flex-direction: column;
+            }
+            
+            .story-image {
+                flex: 0 0 180px;
+                width: 100%;
+            }
+            
+            .reviews-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+        }
+        
+        /* 动画效果 */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .story-link, .review-item {
+            animation: fadeInUp 0.5s ease forwards;
+        }
+        
+        .story-link:nth-child(1) { animation-delay: 0.1s; }
+        .story-link:nth-child(2) { animation-delay: 0.2s; }
+        .story-link:nth-child(3) { animation-delay: 0.3s; }
+        
+        .review-item:nth-child(1) { animation-delay: 0.1s; }
+        .review-item:nth-child(2) { animation-delay: 0.2s; }
+        .review-item:nth-child(3) { animation-delay: 0.3s; }
+        .review-item:nth-child(4) { animation-delay: 0.4s; }
+    </style>
+</head>
+<body>
+    <!-- 乡野故事与用户好评板块 -->
+    <div class="container">
+        <h1 class="section-title">乡野故事与用户评价</h1>
+        
+        <div class="rural-section">
+            <!-- 左侧：乡野故事科普 -->
+            <div class="panel">
+                <div class="panel-header">
+                    <h2><i class="fas fa-book-open"></i> 乡野故事科普</h2>
+                    <p>探索农产品背后的故事与传统智慧</p>
+                </div>
+                <div class="panel-content">
+                    <p class="story-intro">
+                        每一粒粮食、每一颗果实都承载着农耕文化的智慧与故事。从古老的耕作方法到现代有机农业，让我们一起了解农产品背后的文化与传统。
+                    </p>
+                    
+                    <div class="story-links">
+                        <!-- 故事链接1 -->
+                         <div class="story-link" id="story1">
+    <div class="story-image">
+        <img src="https://boot-img.xuexi.cn/image/1005/process/001a393cfb2c4c769d87839285b210c0.jpg" alt="云端助农">
+    </div>
+    <div class="story-info">
+        <h3>云端”助农联盟打开致富门 助千余户果农增收约150万元</h3>
+        <p>被评为“齐鲁乡村之星”和“山亭好品公益推荐官”的程平君就架起了手机支架，精神饱满地开启了直播带货...</p>
+        <div class="story-meta">
+            <span><i class="far fa-clock"></i> 阅读时间: 3分钟</span>
+            <span><i class="far fa-calendar"></i> 2025-07-02</span>
+        </div>
+        <a href="https://www.xuexi.cn/lgpage/detail/index.html?id=13291034157337750226&amp;item_id=13291034157337750226" class="read-more">
+            阅读全文 <i class="fas fa-arrow-right"></i>
+        </a>
+    </div>
+</div>
+                 
+                        <!-- 故事链接2 -->
+                    <div class="story-link" id="story2">
+                        <div class="story-image">
+                            <img src="https://ts1.tc.mm.bing.net/th/id/R-C.68261835671c522210344a4c96fe8849?rik=Obnh8ZnAsm3soA&riu=http%3a%2f%2f5b0988e595225.cdn.sohucs.com%2fimages%2f20190802%2fe5541fa0c04945f0a193b698e7aff1a9.JPG&ehk=cXpfIQMZQ0NE7340NEiPuwZeRz11x85OpKie82cPSZE%3d&risl=&pid=ImgRaw&r=0" alt="综合技术治理">
+                        </div>
+    <div class="story-info">
+        <h3>农业科普-连作障碍不用愁</h3>
+        <p>该视频以辣椒为例，重点介绍设施茄果类蔬菜连作障碍综合治理技术集成应用...</p>
+        <div class="story-meta">
+            <span><i class="far fa-clock"></i> 阅读时间: 4分钟</span>
+            <span><i class="far fa-calendar"></i> 2026-01-20</span>
+        </div>
+        <a href="https://www.xuexi.cn/local/normalTemplate.html?itemId=5904519201185932208" class="read-more">
+            阅读全文 <i class="fas fa-arrow-right"></i>
+        </a>
+    </div>
+</div>
+                        <!-- 故事链接3 -->
+                 <div class="story-link" id="story2">
+    <div class="story-image">
+        <img src="https://x0.ifengimg.com/ucms/2021_48/F500872DD22EFC24DB2A13E686D76E49519B0F4E_size75_w640_h480.jpg" alt="传统灌溉">
+    </div>
+    <div class="story-info">
+        <h3>农业科普-加拿大一枝黄花防治技术要点</h3>
+        <p>加拿大一枝黄花是生态破坏性极强的外来入侵物种，该视频重点讲解加拿大一枝黄花防治技术要点...</p>
+        <div class="story-meta">
+            <span><i class="far fa-clock"></i> 阅读时间: 3分钟</span>
+            <span><i class="far fa-calendar"></i>2026-01-13</span>
+        </div>
+        <a href="https://www.xuexi.cn/local/normalTemplate.html?itemId=427843329813094312" class="read-more">
+            阅读全文 <i class="fas fa-arrow-right"></i>
+        </a>
+    </div>
+</div>
+            <!-- 右侧：用户好评 -->
+            <div class="panel">
+                <div class="panel-header">
+                    <h2><i class="fas fa-star"></i> 用户好评</h2>
+                    <p>听听其他用户对农产品溯源服务的评价</p>
+                </div>
+                <div class="panel-content">
+                    <div class="reviews-header">
+                        <div class="rating-summary">
+                            <div class="rating-stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                            <div class="rating-value">4.8</div>
+                            <div class="total-reviews">基于 342 条评价</div>
+                        </div>
+                        <div class="write-review">
+                            <button id="writeReviewBtn" class="back-button" style="padding: 0.6rem 1.2rem; font-size: 0.9rem;">
+                                <i class="fas fa-pen"></i> 写评价
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="reviews-list">
+                        <!-- 评价1 -->
+                        <div class="review-item">
+                            <div class="review-header">
+                                <div class="user-avatar">
+                                    <img src="https://upload-bbs.miyoushe.com/upload/2021/05/15/162773401/8879a578a86b2345fe0f438308767e05_7158430601874589821.jpg" alt="用户头像">
+                                </div>
+                                <div class="user-info">
+                                    <h4>王宝珠</h4>
+                                    <div class="user-title">有机食品爱好者</div>
+                                </div>
+                                <div class="review-rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                            <p class="review-content">
+                                "使用这个溯源系统后，无路径可寻的农产品变得透明可信。我特别喜欢AI识图功能，拍照就能知道农产品的详细信息，买得更放心了！"
+                            </p>
+                            <div class="review-date">2025年12月16日</div>
+                        </div>
+                        
+                        <!-- 评价2 -->
+                        <div class="review-item">
+                            <div class="review-header">
+                                <div class="user-avatar">
+                                    <img src="https://upload-bbs.miyoushe.com/upload/2023/10/07/287478189/689abff22d9543d72b045f1310252849_192898336359988959.png?x-oss-process=image/resize,s_600/quality,q_80/auto-orient,0/interlace,1/format,png" alt="用户头像">
+                                </div>
+                                <div class="user-info">
+                                    <h4>Neuvillette</h4>
+                                    <div class="user-title">退休教师</div>
+                                </div>
+                                <div class="review-rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                            <p class="review-content">
+                              "乡野故事板块让我重新认识了传统农业智慧。作为老一代人，看到这些农耕文化被数字化保存和传播，感到非常欣慰。希望增加更多地方特色的故事。"
+                            </p>
+                            <div class="review-date">2025年11月28日</div>
+                        </div>
+                        
+                        <!-- 评价3 -->
+                        <div class="review-item">
+                            <div class="review-header">
+                                <div class="user-avatar">
+                                    <img src="https://media.9game.cn/gamebase/ieu-gdc-pre-process/images/20240116/2/2/67487bfd17da42404610f9cfc03d1ffa.jpg" alt="用户头像">
+                                </div>
+                                <div class="user-info">
+                                    <h4>李竹黎</h4>
+                                    <div class="user-title">家庭主妇</div>
+                                </div>
+                                <div class="review-rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                </div>
+                            </div>
+                            <p class="review-content">
+                                "AI识图功能太实用了！我在菜市场看到不认识的蔬菜，拍个照就能知道品种和营养价值。区块链溯源让我能为家人选择最安全的食材。"
+                            </p>
+                            <div class="review-date">2025年10月15日</div>
+                        </div>
+                        
+                        <!-- 评价4 -->
+                        <div class="review-item">
+                            <div class="review-header">
+                                <div class="user-avatar">
+                                    <img src="https://i.bobopic.com/small/102720765.jpg" alt="用户头像">
+                                </div>
+                                <div class="user-info">
+                                    <h4>Nahida</h4>
+                                    <div class="user-title">营养师</div>
+                                </div>
+                                <div class="review-rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                </div>
+                            </div>
+                            <p class="review-content">
+                                "从专业角度看，这个平台提供的农产品信息非常全面。我可以根据溯源信息为客户推荐最适合他们健康需求的农产品。区块链技术确保了信息的真实性。"
+                            </p>
+                            <div class="review-date">2025年9月30日</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 返回主页按钮 -->
+        <div class="back-to-main">
+            <a href="index.html" class="back-button">
+                <i class="fas fa-arrow-left" ></i> 返回主页
+            </a>
+            
+        </div>
+    </div>
+
+    <!-- 写评价模态框 -->
+    <div id="reviewModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
+        <div style="background-color: white; border-radius: 16px; width: 90%; max-width: 500px; padding: 2rem; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+            <h3 style="color: #2c8c4a; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 10px;">
+                <i class="fas fa-pen"></i> 写下您的评价
+            </h3>
+            <form id="reviewForm">
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; color: #555; font-weight: 600;">您的评分</label>
+                    <div id="ratingInput" style="display: flex; gap: 5px; font-size: 1.8rem; color: #ddd; margin-bottom: 1rem;">
+                        <i class="far fa-star" data-rating="1"></i>
+                        <i class="far fa-star" data-rating="2"></i>
+                        <i class="far fa-star" data-rating="3"></i>
+                        <i class="far fa-star" data-rating="4"></i>
+                        <i class="far fa-star" data-rating="5"></i>
+                    </div>
+                    <input type="hidden" id="userRating" value="0">
+                </div>
+                <div style="margin-bottom: 1.5rem;">
+                    <label for="userName" style="display: block; margin-bottom: 0.5rem; color: #555; font-weight: 600;">姓名</label>
+                    <input type="text" id="userName" style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem;" required>
+                </div>
+                <div style="margin-bottom: 1.5rem;">
+                    <label for="userTitle" style="display: block; margin-bottom: 0.5rem; color: #555; font-weight: 600;">身份/职业</label>
+                    <input type="text" id="userTitle" style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem;" required>
+                </div>
+                <div style="margin-bottom: 1.5rem;">
+                    <label for="reviewText" style="display: block; margin-bottom: 0.5rem; color: #555; font-weight: 600;">评价内容</label>
+                    <textarea id="reviewText" rows="4" style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; resize: vertical;" required></textarea>
+                </div>
+                <div style="display: flex; justify-content: flex-end; gap: 1rem;">
+                    <button type="button" id="cancelReview" style="padding: 0.8rem 1.5rem; background-color: #f0f0f0; border: none; border-radius: 8px; color: #666; font-weight: 600; cursor: pointer;">取消</button>
+                    <button type="submit" style="padding: 0.8rem 1.5rem; background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%); border: none; border-radius: 8px; color: white; font-weight: 600; cursor: pointer;">提交评价</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // 获取DOM元素
+        const storyLinks = document.querySelectorAll('.story-link');
+        const writeReviewBtn = document.getElementById('writeReviewBtn');
+        const reviewModal = document.getElementById('reviewModal');
+        const cancelReviewBtn = document.getElementById('cancelReview');
+        const ratingInputStars = document.querySelectorAll('#ratingInput i');
+        const userRatingInput = document.getElementById('userRating');
+        const reviewForm = document.getElementById('reviewForm');
+        const reviewsList = document.querySelector('.reviews-list');
+        
+     
+          
+        // 写评价按钮点击事件
+        writeReviewBtn.addEventListener('click', function() {
+            reviewModal.style.display = 'flex';
+        });
+        
+        // 取消评价
+        cancelReviewBtn.addEventListener('click', function() {
+            reviewModal.style.display = 'none';
+            resetReviewForm();
+        });
+        
+        // 评分选择
+        ratingInputStars.forEach(star => {
+            star.addEventListener('click', function() {
+                const rating = parseInt(this.getAttribute('data-rating'));
+                userRatingInput.value = rating;
+                
+                // 更新星星显示
+                ratingInputStars.forEach((s, index) => {
+                    if (index < rating) {
+                        s.className = 'fas fa-star';
+                        s.style.color = '#FFC107';
+                    } else {
+                        s.className = 'far fa-star';
+                        s.style.color = '#ddd';
+                    }
+                });
+            });
+            
+            // 悬停效果
+            star.addEventListener('mouseover', function() {
+                const rating = parseInt(this.getAttribute('data-rating'));
+                ratingInputStars.forEach((s, index) => {
+                    if (index < rating) {
+                        s.style.color = '#FFC107';
+                    }
+                });
+            });
+            
+            star.addEventListener('mouseout', function() {
+                const currentRating = parseInt(userRatingInput.value);
+                ratingInputStars.forEach((s, index) => {
+                    if (index >= currentRating) {
+                        s.style.color = '#ddd';
+                    }
+                });
+            });
+        });
+        
+        // 提交评价表单
+        reviewForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const userName = document.getElementById('userName').value;
+            const userTitle = document.getElementById('userTitle').value;
+            const reviewText = document.getElementById('reviewText').value;
+            const rating = parseInt(userRatingInput.value);
+            
+            if (rating === 0) {
+                alert('请选择评分');
+                return;
+            }
+            
+            // 创建新的评价元素
+            const newReview = document.createElement('div');
+            newReview.className = 'review-item';
+            newReview.style.animation = 'fadeInUp 0.5s ease forwards';
+            
+            // 生成随机用户头像
+            const avatarId = Math.floor(Math.random() * 100);
+            const avatarUrl = `https://i.pravatar.cc/100?img=${avatarId}`;
+            
+            // 生成评分星星
+            let starsHtml = '';
+            for (let i = 1; i <= 5; i++) {
+                if (i <= rating) {
+                    starsHtml += '<i class="fas fa-star"></i>';
+                } else {
+                    starsHtml += '<i class="far fa-star"></i>';
+                }
+            }
+            
+            // 当前日期
+            const now = new Date();
+            const formattedDate = `${now.getFullYear()}年${now.getMonth()+1}月${now.getDate()}日`;
+            
+            newReview.innerHTML = `
+                <div class="review-header">
+                    <div class="user-avatar">
+                        <img src="${avatarUrl}" alt="用户头像">
+                    </div>
+                    <div class="user-info">
+                        <h4>${userName}</h4>
+                        <div class="user-title">${userTitle}</div>
+                    </div>
+                    <div class="review-rating">
+                        ${starsHtml}
+                    </div>
+                </div>
+                <p class="review-content">
+                    "${reviewText}"
+                </p>
+                <div class="review-date">${formattedDate}</div>
+            `;
+            
+            // 将新评价添加到列表顶部
+            reviewsList.insertBefore(newReview, reviewsList.firstChild);
+            
+            // 关闭模态框并重置表单
+            reviewModal.style.display = 'none';
+            resetReviewForm();
+            
+            // 显示成功提示
+            alert('评价提交成功！感谢您的反馈。');
+        });
+        
+        // 重置评价表单
+        function resetReviewForm() {
+            document.getElementById('userName').value = '';
+            document.getElementById('userTitle').value = '';
+            document.getElementById('reviewText').value = '';
+            userRatingInput.value = 0;
+            
+            // 重置星星显示
+            ratingInputStars.forEach(star => {
+                star.className = 'far fa-star';
+                star.style.color = '#ddd';
+            });
+        }
+        
+        // 点击模态框外部关闭
+        reviewModal.addEventListener('click', function(e) {
+            if (e.target === reviewModal) {
+                reviewModal.style.display = 'none';
+                resetReviewForm();
+            }
+        });
+    </script>
+</body>
+</html>

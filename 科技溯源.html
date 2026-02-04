@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>农产品溯源系统 - AI识图与区块链溯源</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2c8c4a 0%, #1e5f3a 100%);
+            color: white;
+            padding: 1.5rem 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        
+        .logo i {
+            font-size: 2.2rem;
+        }
+        
+        .nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 1.5rem;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+        
+        .nav a:hover {
+            opacity: 0.9;
+            text-decoration: underline;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+        
+        .main-title {
+            text-align: center;
+            color: #1e5f3a;
+            margin-bottom: 1rem;
+            font-size: 2.2rem;
+        }
+        
+        .description {
+            text-align: center;
+            color: #666;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            font-size: 1.1rem;
+        }
+        
+        .panels-container {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .panel {
+            flex: 1;
+            min-width: 300px;
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .panel:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+        }
+        
+        .panel-header {
+            background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        
+        .ai-header {
+            background: linear-gradient(135deg, #2196F3 0%, #0D47A1 100%);
+        }
+        
+        .panel-header h2 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .panel-header p {
+            opacity: 0.9;
+            font-size: 1rem;
+        }
+        
+        .panel-content {
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 400px;
+        }
+        
+        /* AI识图区域样式 */
+        .ai-scan-area {
+            width: 100%;
+            text-align: center;
+        }
+        
+        .scan-button {
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #2196F3 0%, #0D47A1 100%);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 8px 20px rgba(33, 150, 243, 0.3);
+        }
+        
+        .scan-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 28px rgba(33, 150, 243, 0.4);
+        }
+        
+        .scan-button i {
+            font-size: 4rem;
+            margin-bottom: 0.8rem;
+        }
+        
+        .scan-button span {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        
+        .upload-area {
+            border: 2px dashed #ccc;
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 1.5rem;
+            background-color: #f9f9f9;
+            transition: all 0.3s;
+        }
+        
+        .upload-area:hover {
+            border-color: #2196F3;
+            background-color: #f0f7ff;
+        }
+        
+        .upload-area i {
+            font-size: 3rem;
+            color: #2196F3;
+            margin-bottom: 1rem;
+        }
+        
+        .upload-area p {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+        
+        /* 区块链溯源区域样式 */
+        .trace-input-area {
+            width: 100%;
+            text-align: center;
+        }
+        
+        .trace-code-input {
+            width: 100%;
+            max-width: 400px;
+            padding: 1.2rem;
+            font-size: 1.2rem;
+            border: 2px solid #4CAF50;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .trace-code-input:focus {
+            outline: none;
+            border-color: #2E7D32;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+        }
+        
+        .trace-button {
+            background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);
+            color: white;
+            border: none;
+            padding: 1.2rem 3rem;
+            font-size: 1.4rem;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin: 0 auto;
+            transition: all 0.3s;
+            box-shadow: 0 8px 20px rgba(76, 175, 80, 0.3);
+        }
+        
+        .trace-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 28px rgba(76, 175, 80, 0.4);
+        }
+        
+        .trace-button i {
+            font-size: 1.6rem;
+        }
+        
+        .example-codes {
+            margin-top: 2rem;
+            color: #666;
+        }
+        
+        .example-codes h3 {
+            margin-bottom: 0.8rem;
+            color: #333;
+        }
+        
+        .code-example {
+            display: inline-block;
+            background-color: #f1f8e9;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            margin: 0.3rem;
+            font-family: monospace;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .code-example:hover {
+            background-color: #e8f5e9;
+        }
+        
+        /* 溯源结果页面样式 */
+        .trace-result {
+            display: none;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .trace-result-header {
+            background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);
+            color: white;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .trace-result-header h2 {
+            font-size: 1.8rem;
+        }
+        
+        .close-result {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .close-result:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .trace-info {
+            padding: 2rem;
+        }
+        
+        .product-info {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .product-image {
+            flex: 0 0 200px;
+        }
+        
+        .product-image img {
+            width: 100%;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .product-details {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .product-details h3 {
+            color: #1e5f3a;
+            margin-bottom: 1rem;
+            font-size: 1.6rem;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .info-item {
+            background-color: #f8f9fa;
+            padding: 1.2rem;
+            border-radius: 10px;
+            border-left: 4px solid #4CAF50;
+        }
+        
+        .info-item h4 {
+            color: #555;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+        
+        .info-item p {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .timeline {
+            margin-top: 2rem;
+        }
+        
+        .timeline h3 {
+            color: #1e5f3a;
+            margin-bottom: 1.5rem;
+            font-size: 1.4rem;
+        }
+        
+        .timeline-item {
+            display: flex;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+        
+        .timeline-item:before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 30px;
+            bottom: -20px;
+            width: 2px;
+            background-color: #e0e0e0;
+        }
+        
+        .timeline-item:last-child:before {
+            display: none;
+        }
+        
+        .timeline-icon {
+            width: 40px;
+            height: 40px;
+            background-color: #4CAF50;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin-right: 1.5rem;
+            flex-shrink: 0;
+            z-index: 1;
+        }
+        
+        .timeline-content {
+            flex: 1;
+            background-color: #f8f9fa;
+            padding: 1rem;
+            border-radius: 10px;
+        }
+        
+        .timeline-content h4 {
+            color: #333;
+            margin-bottom: 0.3rem;
+        }
+        
+        .timeline-content p {
+            color: #666;
+            font-size: 0.95rem;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+            color: #666;
+            border-top: 1px solid #eee;
+            background-color: white;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .panels-container {
+                flex-direction: column;
+            }
+            
+            .panel {
+                min-width: 100%;
+            }
+            
+            .product-info {
+                flex-direction: column;
+            }
+            
+            .product-image {
+                flex: 0 0 auto;
+                max-width: 300px;
+                margin: 0 auto;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            
+            .nav a {
+                margin: 0 0.75rem;
+            }
+            
+            .main-title {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 页面头部 -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-leaf"></i>
+                <span>农产品溯源系统</span>
+            </div>
+            <nav class="nav">
+                <a href="#"><i class="fas fa-home"></i> 首页</a>
+                <a href="#"><i class="fas fa-info-circle"></i> 关于我们</a>
+                <a href="#"><i class="fas fa-envelope"></i> 联系我们</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 主内容区 -->
+    <main class="container">
+        <h1 class="main-title">农产品AI识图与区块链溯源系统</h1>
+        <p class="description">
+            利用人工智能与区块链技术，为农产品提供精准识别与全程溯源服务。<br>
+            保障食品安全，让消费者买得放心，吃得安心。
+        </p>
+        
+        <!-- 左右面板容器 -->
+        <div class="panels-container">
+            <!-- 左侧AI识图面板 -->
+            <div class="panel">
+                <div class="panel-header ai-header">
+                    <h2><i class="fas fa-robot"></i> AI智能识图</h2>
+                    <p>上传农产品图片，快速识别品种、产地等信息</p>
+                </div>
+                <div class="panel-content">
+                    <div class="ai-scan-area">
+                        <div class="scan-button" id="scanButton">
+                            <i class="fas fa-camera"></i>
+                            <span>点击识别</span>
+                        </div>
+                        <div class="upload-area" id="uploadArea">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>将农产品图片拖放到此处，或点击选择文件</p>
+                            <p>支持 JPG、PNG 格式，大小不超过 5MB</p>
+                            <input type="file" id="fileInput" accept="image/*" style="display: none;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 右侧区块链溯源面板 -->
+            <div class="panel">
+                <div class="panel-header">
+                    <h2><i class="fas fa-link"></i> 区块链溯源</h2>
+                    <p>输入溯源码，查询农产品生产流通全过程</p>
+                </div>
+                <div class="panel-content">
+                    <div class="trace-input-area">
+                        <input type="text" class="trace-code-input" id="traceCodeInput" placeholder="请输入16位溯源码" maxlength="16">
+                        <button class="trace-button" id="traceButton">
+                            <i class="fas fa-qrcode"></i>
+                            <span>扫码溯源</span>
+                        </button>
+                        
+                        <div class="example-codes">
+                            <h3>示例溯源码（点击试用）：</h3>
+                            <div class="code-example" data-code="AG20231015HN001">AG20231015HN001</div>
+                            <div class="code-example" data-code="AG20231120SD002">AG20231120SD002</div>
+                            <div class="code-example" data-code="AG20231205ZJ003">AG20231205ZJ003</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 溯源结果页面（默认隐藏） -->
+        <div class="trace-result" id="traceResult">
+            <div class="trace-result-header">
+                <h2><i class="fas fa-seedling"></i> 农产品溯源信息</h2>
+                <button class="close-result" id="closeResult">&times;</button>
+            </div>
+            <div class="trace-info" id="traceInfo">
+                <!-- 动态内容将由JavaScript填充 -->
+            </div>
+        </div>
+    </main>
+
+    <!-- 页面底部 -->
+    <footer class="footer">
+        <p>© 2025 乡野优选溯源系统 | 基于区块链与人工智能技术 | 保障食品安全，透明可追溯</p>
+        <p>服务热线：400-123-4567 | 邮箱：xiangye@outlook.com</p>
+    </footer>
+
+    <script>
+        // 页面元素
+        const scanButton = document.getElementById('scanButton');
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const traceButton = document.getElementById('traceButton');
+        const traceCodeInput = document.getElementById('traceCodeInput');
+        const traceResult = document.getElementById('traceResult');
+        const traceInfo = document.getElementById('traceInfo');
+        const closeResult = document.getElementById('closeResult');
+        const codeExamples = document.querySelectorAll('.code-example');
+        
+        // 模拟农产品数据
+        const productData = {
+            'AG20231015HN001': {
+                name: '有机红富士苹果',
+                type: '水果类',
+                image: 'https://pic.nximg.cn/file/20221104/3282862_111103883105_2.jpg',
+                origin: '山东省烟台市',
+                producer: '烟台有机农场',
+                harvestDate: '2025-10-15',
+                certification: '有机食品认证',
+                batchNo: 'AG20251015HN001',
+                weight: '5kg/箱',
+                shelfLife: '30天',
+                storage: '0-4℃冷藏',
+                blockchainHash: '0x8f4a7b2c9d1e6f5a3b8c9d2e7f4a1b5c8d9e2f3',
+                timeline: [
+                    { date: '2025-03-10', event: '果树种植', location: '烟台有机农场', desc: '选择优质红富士苹果树苗进行种植' },
+                    { date: '2025-06-20', event: '花期管理', location: '烟台有机农场', desc: '人工授粉与花期保护，确保坐果率' },
+                    { date: '2025-09-05', event: '果实套袋', location: '烟台有机农场', desc: '为每个果实套上保护袋，防止虫害和污染' },
+                    { date: '2025-10-15', event: '采摘收获', location: '烟台有机农场', desc: '人工精选采摘，确保果实完好' },
+                    { date: '2025-10-16', event: '清洗分拣', location: '烟台加工中心', desc: '专业设备清洗，按大小和品质分级' },
+                    { date: '2025-10-18', event: '包装入库', location: '烟台冷链仓库', desc: '气调包装，进入冷链仓储' },
+                    { date: '2025-10-20', event: '物流发货', location: '烟台物流中心', desc: '冷链运输至全国各地' }
+                ]
+            },
+            'AG20231120SD002': {
+                name: '绿色认证大米',
+                type: '粮食类',
+                image: 'https://ts4.tc.mm.bing.net/th/id/OIP-C.lwl4gxLJGgbZi7TpuA96_AHaE8?rs=1&pid=ImgDetMain&o=7&rm=3',
+                origin: '黑龙江省五常市',
+                producer: '五常绿色米业',
+                harvestDate: '2025-11-20',
+                certification: '绿色食品认证',
+                batchNo: 'AG20231120SD002',
+                weight: '10kg/袋',
+                shelfLife: '12个月',
+                storage: '阴凉干燥处',
+                blockchainHash: '0x7e5b3a9c1d8f2e4b6a9c8d7e5f3a2b1c4d6e9f',
+                timeline: [
+                    { date: '2025-04-15', event: '水稻播种', location: '吉林长春水稻基地', desc: '选用优质稻种进行播种' },
+                    { date: '2025-07-10', event: '田间管理', location: '吉林长春水稻基地', desc: '绿色防控病虫害，人工除草' },
+                    { date: '2025-10-25', event: '水稻收割', location: '吉林长春水稻基地', desc: '机械化收割，保证稻谷完整' },
+                    { date: '2025-11-05', event: '稻谷烘干', location: '长春加工厂', desc: '低温烘干，保留营养成分' },
+                    { date: '2025-11-10', event: '去壳加工', location: '长春加工厂', desc: '采用先进设备去壳，保留米胚' },
+                    { date: '2025-11-15', event: '精米筛选', location: '长春加工厂', desc: '色选机筛选，去除不良米粒' },
+                    { date: '2025-11-20', event: '包装出库', location: '长春粮食储存仓库', desc: '真空包装，防潮防虫' }
+                ]
+            },
+            'AG20231205ZJ003': {
+                name: '高山有机绿茶',
+                type: '茶叶类',
+                image: 'https://img.alicdn.com/i3/2338561529/O1CN01f8JkV21NAKMbG4vV9_!!2338561529.jpg',
+                origin: '浙江省杭州市',
+                producer: '龙井茶有机茶园',
+                harvestDate: '2025-5-20',
+                certification: '有机食品认证',
+                batchNo: 'AG20231205ZJ003',
+                weight: '250g/罐',
+                shelfLife: '24个月',
+                storage: '避光密封，阴凉干燥',
+                blockchainHash: '0x9a6b4c8d2e7f5a3b1c8d9e2f4a6b5c7d8e9f1',
+                timeline: [
+                    { date: '2025-03-10', event: '春茶采摘', location: '杭州龙井有机茶园', desc: '人工采摘一芽一叶初展' },
+                    { date: '2025-03-16', event: '摊青萎凋', location: '西湖龙井茶厂', desc: '室内自然萎凋，散发青草气' },
+                    { date: '2025-03-25', event: '手工炒制', location: '西湖龙井茶厂', desc: '传统手工炒制，形成扁平形状' },
+                    { date: '2025-03-30', event: '干燥提香', location: '西湖龙井茶厂', desc: '低温慢烘，提升茶叶香气' },
+                    { date: '2025-03-31', event: '分级筛选', location: '西湖龙井茶厂', desc: '按茶叶大小和完整度分级' },         
+                    { date: '2025-04-05', event: '检验包装', location: '西湖龙井茶厂', desc: '专业检验，真空充氮包装' },
+                    { date: '2025-04-06', event: '出库销售', location: '杭州物流中心', desc: '发货至全国各地经销商' }
+                ]
+            }
+        };
+        
+
+        // 溯源按钮点击事件
+        traceButton.addEventListener('click', function() {
+            const code = traceCodeInput.value.trim();
+            if (code) {
+                showTraceResult(code);
+            } else {
+                alert('请输入溯源码！');
+                traceCodeInput.focus();
+            }
+        });
+        
+        // 示例溯源码点击事件
+        codeExamples.forEach(example => {
+            example.addEventListener('click', function() {
+                const code = this.getAttribute('data-code');
+                traceCodeInput.value = code;
+                showTraceResult(code);
+            });
+        });
+        
+        // 关闭溯源结果
+        closeResult.addEventListener('click', function() {
+            traceResult.style.display = 'none';
+        });
+        
+        // 显示溯源结果函数
+        function showTraceResult(code) {
+            const product = productData[code];
+            
+            if (!product) {
+                alert('溯源码无效或不存在，请检查后重新输入！');
+                return;
+            }
+            
+            // 构建溯源信息HTML
+            let html = `
+                <div class="product-info">
+                    <div class="product-image">
+                        <img src="${product.image}" alt="${product.name}">
+                    </div>
+                    <div class="product-details">
+                        <h3>${product.name}</h3>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <h4>产品类型</h4>
+                                <p>${product.type}</p>
+                            </div>
+                            <div class="info-item">
+                                <h4>原产地</h4>
+                                <p>${product.origin}</p>
+                            </div>
+                            <div class="info-item">
+                                <h4>生产商</h4>
+                                <p>${product.producer}</p>
+                            </div>
+                            <div class="info-item">
+                                <h4>收获日期</h4>
+                                <p>${product.harvestDate}</p>
+                            </div>
+                            <div class="info-item">
+                                <h4>质量认证</h4>
+                                <p>${product.certification}</p>
+                            </div>
+                            <div class="info-item">
+                                <h4>批次编号</h4>
+                                <p>${product.batchNo}</p>
+                            </div>
+                            <div class="info-item">
+                                <h4>包装规格</h4>
+                                <p>${product.weight}</p>
+                            </div>
+                            <div class="info-item">
+                                <h4>保质期</h4>
+                                <p>${product.shelfLife}</p>
+                            </div>
+                            <div class="info-item">
+                                <h4>存储条件</h4>
+                                <p>${product.storage}</p>
+                            </div>
+                            <div class="info-item">
+                                <h4>区块链哈希</h4>
+                                <p style="font-size: 0.8rem; word-break: break-all;">${product.blockchainHash}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline">
+                    <h3><i class="fas fa-history"></i> 产品溯源时间线</h3>
+            `;
+            
+            // 添加时间线项目
+            product.timeline.forEach((item, index) => {
+                html += `
+                    <div class="timeline-item">
+                        <div class="timeline-icon">
+                            <i class="fas fa-${getTimelineIcon(index)}"></i>
+                        </div>
+                        <div class="timeline-content">
+                            <h4>${item.event} <span style="color: #4CAF50; font-size: 0.9rem;">(${item.date})</span></h4>
+                            <p><strong>地点:</strong> ${item.location}</p>
+                            <p>${item.desc}</p>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += `</div>`;
+            
+            // 更新页面内容
+            traceInfo.innerHTML = html;
+            
+            // 显示结果页面
+            traceResult.style.display = 'block';
+            
+            // 滚动到结果区域
+            traceResult.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+        
+        // 获取时间线图标
+        function getTimelineIcon(index) {
+            const icons = ['seedling', 'water', 'sun', 'tractor', 'industry', 'filter', 'shipping-fast'];
+            return icons[index] || 'circle';
+        }
+        
+        // 初始加载时显示一个示例
+        window.addEventListener('DOMContentLoaded', function() {
+            // 设置默认示例溯源码
+            traceCodeInput.value = 'AG20231015HN001';
+            
+            // 模拟扫码按钮悬停效果
+            traceButton.addEventListener('mouseenter', function() {
+                this.innerHTML = '<i class="fas fa-search"></i><span>查询溯源</span>';
+            });
+            
+            traceButton.addEventListener('mouseleave', function() {
+                this.innerHTML = '<i class="fas fa-qrcode"></i><span>扫码溯源</span>';
+            });
+        });
+    </script>
+</body>
+</html>

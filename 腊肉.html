@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>乡野优选 - 优选新鲜菠菜</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.5;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* 头部样式 */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #e8e8e8;
+            margin-bottom: 20px;
+        }
+        
+        .brand {
+            font-size: 28px;
+            font-weight: bold;
+            color: #ff6a00;
+            text-decoration: none;
+        }
+        
+        .brand-subtitle {
+            font-size: 16px;
+            color: #666;
+            margin-left: 5px;
+        }
+        
+        /* 店铺信息 */
+        .shop-info {
+            background-color: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .shop-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #222;
+        }
+        
+        .shop-rating {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .stars {
+            color: #ff9900;
+            margin-right: 10px;
+        }
+        
+        .shop-detail {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 8px;
+        }
+        
+        .detail-item {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        /* 商品主区域 */
+        .product-main {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .product-image {
+            flex: 1;
+            min-width: 300px;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            position: relative;
+        }
+        
+        .image-container {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            background: linear-gradient(to bottom, #f9f9f9, #fff);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .product-img {
+            max-width: 80%;
+            max-height: 80%;
+            object-fit: contain;
+        }
+        
+        .video-btn {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background-color: #e60000;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 15px;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        /* 添加这行代码 - 视频按钮播放时的状态 */
+.video-btn.video-playing {
+    background-color: #666;
+}
+/* 视频容器样式 */
+.video-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.9);
+    z-index: 10;
+}
+
+.product-video {
+    max-width: 90%;
+    max-height: 90%;
+    border-radius: 8px;
+}
+
+.close-video {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: rgba(255, 255, 255, 0.3);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    font-size: 16px;
+    cursor: pointer;
+    z-index: 30;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(5px);
+}
+
+.close-video:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+        /* 价格区域 */
+        .price-section {
+            background-color: #fff8f0;
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .current-price {
+            font-size: 28px;
+            color: #ff4400;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .original-price {
+            font-size: 16px;
+            color: #999;
+            text-decoration: line-through;
+            margin-bottom: 10px;
+        }
+        
+        .discount-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .discount-tag {
+            background-color: #fff0e6;
+            color: #ff6a00;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        /* 订单信息 */
+        .order-info {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .info-item {
+            display: flex;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        
+        .info-label {
+            color: #666;
+            width: 100px;
+            flex-shrink: 0;
+        }
+        
+        .info-value {
+            color: #222;
+            flex: 1;
+        }
+        
+        /* 商品规格 */
+        .product-specs {
+            margin-bottom: 30px;
+        }
+        
+        .spec-item {
+            margin-bottom: 15px;
+        }
+        
+        .spec-title {
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #333;
+        }
+        
+        .spec-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .spec-option {
+            padding: 8px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .spec-option:hover {
+            border-color: #ff6a00;
+            color: #ff6a00;
+        }
+        
+        .spec-option.selected {
+            border-color: #ff6a00;
+            background-color: #fff8f0;
+            color: #ff6a00;
+        }
+        
+        /* 购买操作区域 */
+        .purchase-section {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .qty-btn {
+            width: 36px;
+            height: 36px;
+            background-color: #f8f8f8;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        
+        .qty-input {
+            width: 50px;
+            height: 36px;
+            border: none;
+            text-align: center;
+            font-size: 16px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            flex: 1;
+        }
+        
+        .btn-cart {
+            flex: 1;
+            background-color: #ff9500;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 12px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .btn-cart:hover {
+            background-color: #e68600;
+        }
+        
+        .btn-buy {
+            flex: 1;
+            background-color: #ff4400;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 12px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .btn-buy:hover {
+            background-color: #e63c00;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .product-main {
+                flex-direction: column;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .brand {
+                font-size: 24px;
+            }
+        }
+        
+        .divider {
+            height: 1px;
+            background-color: #eee;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 头部 -->
+        <header class="header">
+            <div>
+                <a href="#" class="brand">乡野优选</a>
+                <span class="brand-subtitle">Xiangye Youxuan</span>
+            </div>
+            <div>
+                <i class="fas fa-user" style="color: #666; font-size: 20px; cursor: pointer;"></i>
+            </div>
+        </header>
+        
+        <!-- 店铺信息 -->
+        <section class="shop-info">
+            <h2 class="shop-title">自然出色生态园</h2>
+            <div class="shop-rating">
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                </div>
+                <span>4.6 | 会员好评率94% | 平均12小时发货 | 平均1小时内退款</span>
+            </div>
+        </section>
+        
+        <!-- 商品主区域 -->
+
+ <!-- 在商品图片区域添加了视频容器和关闭按钮 -->
+<div class="image-container">
+    <!-- 西红柿图片 -->
+    <img src="https://famayun.oss-cn-shenzhen.aliyuncs.com/uploads/210/20231029/653e6313a1488.jpeg" alt="腊肉" class="product-img" id="static-img">
+    
+               
+    <!-- 视频容器（替换为video标签） -->
+    <div class="video-container" id="video-container">
+        <video class="product-video" id="product-video" controls>
+            <source src="images\腊肉.mp4" type="video/mp4">
+            您的浏览器不支持视频播放。
+        </video>
+        <button class="close-video" id="close-video">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+    
+    <!-- 视频按钮（添加了ID和动态文字） -->
+    <button class="video-btn" id="video-btn">
+        <i class="fas fa-play-circle"></i> <span id="btn-text">视频</span>
+    </button>
+</div>
+            <!-- 商品详情 -->
+            <div class="product-details">
+                <div class="product-info">
+                    <h1 class="product-title">湘西农家烟熏腊肉 特产农家自制</h1>
+                    
+                    <div class="sales-info">
+                        <div class="sales-item">已售<span class="highlight"> 8万+</span></div>
+                        <div class="sales-item"><span class="highlight">210人</span>评价"味道不错、烟熏味不浓"</div>
+                        <div class="sales-item">超<span class="highlight">1.8万</span>回头客</div>
+                        <div class="sales-item">超<span class="highlight">9千人</span>加购</div>
+                    </div>
+                    
+                    <!-- 价格区域 -->
+                    <div class="price-section">
+                        <div class="current-price">券后¥29.6起</div>
+                        <div class="original-price">优惠前¥49.9起</div>
+                        <div class="discount-tags">
+                            <span class="discount-tag">官方立减20%</span>
+                            <span class="discount-tag">限时红包减2元</span>
+                        </div>
+                    </div>
+                    
+                    <!-- 订单信息 -->
+                    <div class="order-info">
+                        <div class="info-item">
+                            <div class="info-label">预计送达</div>
+                            <div class="info-value">明天送达</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">快递</div>
+                            <div class="info-value">免运费</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">产地</div>
+                            <div class="info-value">湘西</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">保障</div>
+                            <div class="info-value">损坏必赔 · 7天无理由退货 · 退货宝</div>
+                        </div>
+                    </div>
+                    
+                    <!-- 商品规格 -->
+                    <div class="product-specs">
+                        <div class="spec-item">
+                            <div class="spec-title">重量</div>
+                            <div class="spec-options">
+                                <div class="spec-option selected">500g装</div>
+                            </div>
+                        </div>
+                        
+                        <div class="spec-item">
+                            <div class="spec-title">口味</div>
+                            <div class="spec-options">
+                                <div class="spec-option selected">精品五花肉【肥瘦相间】</div>
+                                    <div class="spec-option selected">偏肥五花肉【很透亮】</div>
+                                    <div class="spec-option">精品后腿肉【瘦肉多】</div>
+                               
+                            </div>
+                        </div>
+           
+                    
+                    <div class="divider"></div>
+                    
+                    <!-- 购买操作 -->
+                    <div class="purchase-section">
+                        <div class="quantity-selector">
+                            <button class="qty-btn" id="decrease">-</button>
+                            <input type="text" class="qty-input" value="1" id="quantity">
+                            <button class="qty-btn" id="increase">+</button>
+                        </div>
+                        
+                        <div class="action-buttons">
+                            <button class="btn-cart">
+                                <i class="fas fa-shopping-cart"></i> 加入购物车
+                            </button>
+                            <button class="btn-buy">
+                                <i class="fas fa-bolt"></i> 立即购买
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 其他商品信息区域（可以扩展） -->
+        <div style="height: 100px;"></div>
+    </div>
+
+    <script>
+        // 商品规格选择
+        const specOptions = document.querySelectorAll('.spec-option');
+        specOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                // 移除同一规格组中其他选项的selected类
+                const parent = this.parentElement;
+                parent.querySelectorAll('.spec-option').forEach(item => {
+                    item.classList.remove('selected');
+                });
+                
+                // 为当前选项添加selected类
+                this.classList.add('selected');
+            });
+        });
+        
+        // 数量增减功能
+        const decreaseBtn = document.getElementById('decrease');
+        const increaseBtn = document.getElementById('increase');
+        const quantityInput = document.getElementById('quantity');
+        
+        decreaseBtn.addEventListener('click', function() {
+            let currentValue = parseInt(quantityInput.value);
+            if (currentValue > 1) {
+                quantityInput.value = currentValue - 1;
+            }
+        });
+        
+        increaseBtn.addEventListener('click', function() {
+            let currentValue = parseInt(quantityInput.value);
+            if (currentValue < 99) {
+                quantityInput.value = currentValue + 1;
+            }
+        });
+        
+        // 输入验证
+        quantityInput.addEventListener('change', function() {
+            let value = parseInt(this.value);
+            if (isNaN(value) || value < 1) {
+                this.value = 1;
+            } else if (value > 99) {
+                this.value = 99;
+            }
+        });
+        
+        // 按钮点击事件
+        const cartBtn = document.querySelector('.btn-cart');
+        const buyBtn = document.querySelector('.btn-buy');
+        
+        cartBtn.addEventListener('click', function() {
+            const quantity = document.getElementById('quantity').value;
+            const selectedSpec = document.querySelector('.spec-option.selected').textContent;
+            alert(`已成功将 ${quantity} 件 "${selectedSpec}" 加入购物车！`);
+        });
+        
+        buyBtn.addEventListener('click', function() {
+            const quantity = document.getElementById('quantity').value;
+            const selectedSpec = document.querySelector('.spec-option.selected').textContent;
+            alert(`立即购买 ${quantity} 件 "${selectedSpec}"，正在跳转到订单确认页面...`);
+        });
+        
+// ========== 新增的视频功能代码 ==========
+const videoBtn = document.getElementById('video-btn');
+const videoContainer = document.getElementById('video-container');
+const productVideo = document.getElementById('product-video');
+const closeVideoBtn = document.getElementById('close-video');
+const staticImg = document.getElementById('static-img');
+const btnText = document.getElementById('btn-text');
+
+// 视频按钮点击事件
+videoBtn.addEventListener('click', function() {
+    if (videoContainer.style.display === 'flex') {
+        hideVideo();
+    } else {
+        // 显示视频容器
+        videoContainer.style.display = 'flex';
+        closeVideoBtn.style.display = 'flex';
+        
+        // 隐藏静态图片
+        staticImg.style.display = 'none';
+        
+        // 修改按钮状态
+        videoBtn.classList.add('video-playing');
+        btnText.textContent = '关闭视频';
+        
+        // 播放视频
+        productVideo.play();
+    }
+});
+
+// 关闭视频按钮事件
+closeVideoBtn.addEventListener('click', function() {
+    hideVideo();
+});
+
+// 点击视频容器外部也可以关闭视频
+videoContainer.addEventListener('click', function(e) {
+    if (e.target === videoContainer) {
+        hideVideo();
+    }
+});
+
+// 隐藏视频的函数
+function hideVideo() {
+    // 暂停视频
+    productVideo.pause();
+    // 重置视频到开始
+    productVideo.currentTime = 0;
+    
+    videoContainer.style.display = 'none';
+    closeVideoBtn.style.display = 'none';
+    staticImg.style.display = 'block';
+    videoBtn.classList.remove('video-playing');
+    btnText.textContent = '视频';
+}
+
+// 添加键盘ESC键关闭视频功能
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && videoContainer.style.display === 'flex') {
+        hideVideo();
+    }
+});
+// ========== 视频功能代码结束 ==========
+    </script>
+</body>
+</html>
